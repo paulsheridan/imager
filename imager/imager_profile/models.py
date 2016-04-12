@@ -1,5 +1,6 @@
+from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class ActiveManager(models.Manager):
@@ -8,8 +9,9 @@ class ActiveManager(models.Manager):
         return qs.filter(user__is_active=True)
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, default='username')
-    email = models.EmailField(default='email')
-    region = models.CharField(default='region')
-    camera = models.CHarField(default='camera')
+class ImagerProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                related_name='profile')
+    region = models.CharField(default='', max_length=255)
+    camera = models.CHarField(default='', max_length=255)
+    active = ActiveManager()

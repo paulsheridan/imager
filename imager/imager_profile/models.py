@@ -3,8 +3,13 @@ from django.db import models
 from django.conf import settings
 
 
+PHOTOGRAPHY_TYPES = [
+    ('portrait', 'Portrait'),
+    ('landscape', 'Landscape'),
+]
+
+
 class ActiveManager(models.Manager):
-    """Ensure only active profiles are returned."""
     def get_queryset(self):
         qs = super(ActiveManager, self).get_queryset()
         return qs.filter(user__is_active__exact=True)
@@ -12,19 +17,20 @@ class ActiveManager(models.Manager):
 
 @python_2_unicode_compatible
 class ImagerProfile(models.Model):
-    """Profile model."""
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        related_name='profile'
-        )
-    # following = models.ManyToManyField(
-    #     'self',
-    #     symmetrical=False,
-    #     related_name='follower_of'
-    #     )
-    # region = models.CharField(default='', max_length=3, choices=REGIONS)
-    camera = models.CharField(default='', max_length=30)
-    # photography_type = models.CharField(default='', max_length=30, choices=PHOTO_TYPES)
-
-    active = ActiveManager()
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='profile',
+                                null=False)
+    location = models.CharField(default='', max_length=255)
+    bio = models.TextField(default='')
+    camera = models.TextField(default='')
+    photography_type = models.CharField(max_length=30, default='portrait',
+                                        choices=PHOTOGRAPHY_TYPES)
+    friends = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     related_name='friend_of')
     objects = models.Manager()
+    active = ActiveManager()
+
+    @property
+    def is_active(self):
+        return self.user.is_active

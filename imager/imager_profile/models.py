@@ -21,7 +21,7 @@ class ImagerProfile(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='profile',
                                 null=False)
-    location = models.CharField(default='', max_length=255)
+    region = models.CharField(default='us', max_length=30)
     bio = models.TextField(default='')
     camera = models.TextField(default='')
     photography_type = models.CharField(max_length=30, default='portrait',

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'imager_profile.apps.ImagerProfileConfig',
+    'imager_images',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'imager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_imager_two',
+        'NAME': 'django_imager',
     }
 }
 
